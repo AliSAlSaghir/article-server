@@ -80,6 +80,24 @@ abstract class Model {
     return $stmt->execute();
   }
 
+  public static function where(string $column, $value): array {
+    $sql = "SELECT * FROM " . static::$table . " WHERE $column = ?";
+    $stmt = static::$db->prepare($sql);
+
+    $type = static::getParamTypes([$value]);
+    $stmt->bind_param($type, $value);
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+    $items = [];
+
+    while ($row = $result->fetch_assoc()) {
+      $items[] = new static($row);
+    }
+
+    return $items;
+  }
+
   protected static function getParamTypes(array $params): string {
     return implode('', array_map(function ($param) {
       return match (gettype($param)) {

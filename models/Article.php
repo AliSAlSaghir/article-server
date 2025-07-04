@@ -1,5 +1,7 @@
 <?php
 require_once("Model.php");
+require_once __DIR__ . '/User.php';
+require_once __DIR__ . '/Category.php';
 
 class Article extends Model {
   protected static string $table = "articles";
@@ -17,6 +19,23 @@ class Article extends Model {
         $this->$key = $value;
       }
     }
+  }
+
+  public function setTitle($title) {
+    $this->title = $title;
+  }
+
+  public function setCategoryId($category_id) {
+    $this->category_id = $category_id;
+  }
+
+  public function setDescription($description) {
+    $this->description = $description;
+  }
+
+  public static function deleteAll() {
+    $sql = "DELETE FROM articles";
+    return Model::$db->query($sql);
   }
 
   private function loadAuthor() {
