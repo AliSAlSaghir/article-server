@@ -1,13 +1,10 @@
 <?php
 
 class ResponseService {
-
-    public function success_response($payload){
-        $response = [];
-        $response["status"] = 200;
-        $response["payload"] = $payload;
-        return json_encode($response);
-    }
-
-
+  public static function response($code, $data) {
+    http_response_code($code);
+    header('Content-Type: application/json');
+    echo json_encode(['status' => $code] + $data);
+    exit;
+  }
 }
