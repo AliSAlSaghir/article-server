@@ -16,6 +16,15 @@ class Category extends Model {
     }
   }
 
+  public function setName($name) {
+    $this->name = $name;
+  }
+
+  public static function deleteAll() {
+    $sql = "DELETE FROM categories";
+    return Model::$db->query($sql);
+  }
+
   public function toArray() {
     return get_object_vars($this);
   }
