@@ -1,52 +1,41 @@
 <?php
 require_once("Model.php");
 
-class Article extends Model{
+class Article extends Model {
+  protected static string $table = "articles";
 
-    private int $id; 
-    private string $name; 
-    private string $author; 
-    private string $description; 
-    
-    protected static string $table = "articles";
+  private ?int $id;
+  private string $title;
+  private int $author_id;
+  private int $category_id;
+  private string $description;
 
-    public function __construct(array $data){
-        $this->id = $data["id"];
-        $this->name = $data["name"];
-        $this->author = $data["author"];
-        $this->description = $data["description"];
+
+  public function __construct(array $data) {
+    foreach ($data as $key => $value) {
+      if (property_exists($this, $key)) {
+        $this->$key = $value;
+      }
     }
+  }
 
-    public function getId(): int {
-        return $this->id;
-    }
+  private function loadAuthor() {
+    $author = User::find($this->author_id);
+    return $author ? $author->toArray() : null;
+  }
 
-    public function getName(): string {
-        return $this->name;
-    }
+  private function loadCategory() {
+    $category = Category::find($this->category_id);
+    return $category ? $category->toArray() : null;
+  }
 
-    public function getAuthor(): string {
-        return $this->author;
-    }
 
-    public function getDescription(): string {
-        return $this->description;
-    }
+  public function toArray(): array {
+    $data = get_object_vars($this);
 
-    public function setName(string $name){
-        $this->name = $name;
-    }
+    $data['author'] = $this->loadAuthor();
+    $data['category'] = $this->loadCategory();
 
-    public function setAuthor(string $author){
-        $this->author = $author;
-    }
-
-    public function setDescription(string $description){
-        $this->description = $description;
-    }
-
-    public function toArray(){
-        return [$this->id, $this->name, $this->author, $this->description];
-    }
-    
+    return $data;
+  }
 }

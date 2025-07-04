@@ -1,14 +1,12 @@
 <?php
 require_once("Model.php");
 
-class User extends Model {
-  protected static string $table = 'users';
+class Category extends Model {
+  protected static string $table = "categories";
 
   private ?int $id;
   private string $name;
-  private string $email;
-  private string $password;
-  private ?string $created_at;
+
 
   public function __construct(array $data) {
     foreach ($data as $key => $value) {
@@ -19,8 +17,6 @@ class User extends Model {
   }
 
   public function toArray() {
-    $data = get_object_vars($this);
-    unset($data['password']);
-    return $data;
+    return get_object_vars($this);
   }
 }
