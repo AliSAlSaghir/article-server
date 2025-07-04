@@ -1,12 +1,17 @@
-<?php 
+<?php
 require("../connection/connection.php");
 
-
 $query = "CREATE TABLE articles(
-          id INT(11) AUTO_INCREMENT PRIMARY KEY, 
-          name VARCHAR(255) NOT NULL, 
-          author VARCHAR(255) NOT NULL, 
-          description TEXT NOT NULL)";
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          title VARCHAR(100) NOT NULL,
+          author INT NOT NULL,
+          description TEXT NOT NULL,
+          
+          FOREIGN KEY (author) REFERENCES users(id) ON DELETE CASCADE
+          )";
 
-$execute = $mysqli->prepare($query);
-$execute->execute();
+if ($mysqli->query($query)) {
+  echo "Table `articles` created successfully.";
+} else {
+  echo "Error creating table: " . $mysqli->error;
+}
